@@ -1,0 +1,59 @@
+@import url('https://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css');
+@import url(https://fonts.googleapis.com/css?family=Nunito);
+html,
+body {
+    height: 100%;
+    font-family: 'Nunito' !important;
+}
+
+img {
+    width: 100%;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+form {
+    padding-top: 10px;
+    font-size: 14px;
+    margin-top: 30px;
+}
+
+.card-title {
+    font-weight: 300;
+}
+
+.login-form {
+    margin: 50px;
+}
+
+.user:before {
+    content: '\f007';
+    font: 14px fontawesome;
+    color: #5b5b5b;
+}
+
+.lock:before {
+    content: '\f023';
+    font: 14px fontawesome;
+    color: #5b5b5b;
+}
+
+.sign-up {
+    text-align: center;
+    padding: 20px 0 0;
+}
+
+.icon--info {
+    background-color: #e5e5e5;
+    border-radius: 50%;
+}
+
+.forgetmdp {
+    float: right;
+    font-size: 12px;
+}
