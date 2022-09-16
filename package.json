@@ -1,0 +1,29 @@
+{
+    "name": "cerisonet",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node monserveur.js",
+        "dev": "nodemon monserveur.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/VorTrex37/CERISoNet.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/VorTrex37/CERISoNet/issues"
+    },
+    "homepage": "https://github.com/VorTrex37/CERISoNet#readme",
+    "dependencies": {
+        "dotenv": "^16.0.2",
+        "express": "^4.18.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.19"
+    }
+}
