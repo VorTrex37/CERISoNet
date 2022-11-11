@@ -124,7 +124,6 @@ async function comment() {
 
 appAng.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
-
 })
 
 // Création et lancement du serveur https

@@ -70,8 +70,14 @@ export class LoginComponent implements OnInit
           // Affiche une notification de type success une fois la connexion réussi
           this.showNotification( 'success', 'Connexion réussie !');
 
-          // Affiche une notification de type info pour montrer la date de dernière connexion à l'utilisateur
-          this.showNotification( 'info', 'Dernière connexion : ' + this.datePipe.transform(lastDate, 'dd/MM/yyyy HH:mm::ss', 'fr'));
+          if (lastDate == "Première connexion")
+          {
+            // Affiche une notification de type info pour montrer la première connexion à l'utilisateur
+            this.showNotification( 'info', 'Dernière connexion : ' +  lastDate);
+          } else{
+            // Affiche une notification de type info pour montrer la date de dernière connexion à l'utilisateur
+            this.showNotification( 'info', 'Dernière connexion : ' + this.datePipe.transform(lastDate, 'dd/MM/yyyy HH:mm::ss', 'fr'));
+          }
         }
       },
           //Réception et Gestion des réponses erreurs
