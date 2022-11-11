@@ -113,3 +113,5 @@ env/.env.prod
 .idea/*
 CERISoNet/src/environments/environment.ts
 CERISoNet/src/environments/environment.prod.ts
+keys/key.pem
+keys/cert.pem
