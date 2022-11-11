@@ -111,3 +111,5 @@ env/.env.prod
 *.bat
 
 .idea/*
+CERISoNet/src/environments/environment.ts
+CERISoNet/src/environments/environment.prod.ts
