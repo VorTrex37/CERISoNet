@@ -20,7 +20,6 @@ export class LoginComponent implements OnInit
 {
   isLogin: boolean = false
   errorMessage: any
-  baseUrl = environment.baseUrl;
 
 
   constructor(

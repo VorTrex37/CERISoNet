@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  //
+  // L'URL est une variable d'environnement
   baseUrl = environment.baseUrl;
 
   constructor(private _http: HttpClient) {
