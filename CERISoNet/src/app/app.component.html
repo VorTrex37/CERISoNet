@@ -1,0 +1,29 @@
+<script src="app.component.ts"></script>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Navbar brand -->
+    <a class="navbar-brand" routerLink = "">CERISoNet</a>
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <!-- Right links -->
+      <!-- Affiche Connexion ou Déconnexion selon le token -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0" >
+        <li  class="nav-item" [hidden] = 'userConnected()'>
+          <a class="nav-link" routerLink = "/login">Connexion</a>
+        </li>
+        <li class="nav-item" [hidden] = '!userConnected()'>
+          <a class="nav-link" (click) = 'logout()'>Déconnexion</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- Bandeau dynamique -->
+<notifier-container></notifier-container>
+<router-outlet></router-outlet>

@@ -1,0 +1,57 @@
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-3 login-form">
+            <div class="row g-0">
+              <div class="col-md-6 order-md-2">
+                <img src="../../../assets/img/avantage-reseaux-sociaux.png" class="img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-md-6">
+                <div class="card-body">
+                  <h3 class="card-title m-2">Connectez-vous à CERISoNet</h3>
+                  <div class="card-text">
+                    <form #myform = "ngForm" (ngSubmit) = "onSubmit(myform)">
+                      <div class="mb-3">
+                        <label for="username" class="form-label">Identifiant</label>
+                        <div class="input-group">
+                          <span class="input-group-text">
+                              <i class="fa fa-user"></i>
+                          </span>
+                          <input type="text" id="username" name="username" class="form-control" placeholder="Identifiant" ngModel>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <a class="forgetmdp" href="#">Mot de passe oublié ?</a>
+                        <div class="input-group">
+                          <span class="input-group-text">
+                              <i class="fa fa-lock"></i>
+                          </span>
+                          <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" ngModel>
+                        </div>
+                        <div class="col-auto">
+                          <span id="passwordHelpInline" class="form-text">Doit comporter entre 9 et 20 caractères.</span>
+                        </div>
+                      </div>
+                      <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="keep-signed">
+                        <label class="form-check-label" for="keep-signed">Se souvenir de moi</label>
+                      </div>
+                      <button type="submit" class="submit btn btn-primary">Se connecter</button>
+                      <div class="sign-up">
+                        <p>Vous n'avez pas de compte ? <a href="#">Inscrivez-vous</a></p>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+

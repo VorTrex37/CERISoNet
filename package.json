@@ -5,8 +5,8 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "node monserveur.js",
-        "dev": "nodemon monserveur.js",
+        "start": "env-cmd -f ./env/.env.prod node monserveur.js",
+        "dev": "env-cmd -f ./env/.env.dev nodemon monserveur.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -20,8 +20,16 @@
     },
     "homepage": "https://github.com/VorTrex37/CERISoNet#readme",
     "dependencies": {
+        "connect-mongodb-session": "^3.1.1",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.2",
-        "express": "^4.18.1"
+        "env-cmd": "^10.1.0",
+        "express": "^4.18.1",
+        "express-session": "^1.17.3",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.6.6",
+        "pg": "^8.8.0",
+        "util": "^0.12.5"
     },
     "devDependencies": {
         "nodemon": "^2.0.19"
