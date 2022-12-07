@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import {PostgresDB} from '../../database/PostgresDB.js'
+import { PostgresDB } from '../../database/PostgresDB.js'
 import { User } from '../models/User.js'
 import crypto from 'crypto';
 
@@ -12,7 +12,7 @@ export class UserController
     async getAllUsers()
     {
             const connect = await PostgresDB.connectDB();
-            const response = await connect.query({text : 'SELECT * FROM utilisateurs'});
+            const response = await connect.query({text : 'SELECT * FROM ' + process.env.PG_SCHEMA + '.users'});
 
             if (!response || !response.rows)
             {
@@ -25,12 +25,10 @@ export class UserController
                 users.push(new User(
                    user.id,
                    user.identifiant,
-                   user.pass,
+                   user.motpasse,
                    user.nom,
                    user.prenom,
                    user.avatar,
-                   user.status,
-                   user.birthday,
                    ));
             });
 
@@ -45,7 +43,7 @@ export class UserController
         }
 
         const connect = await PostgresDB.connectDB();
-        const response = await connect.query({text : 'SELECT * FROM utilisateurs WHERE id = $1',
+        const response = await connect.query({text : 'SELECT * FROM ' + process.env.PG_SCHEMA + '.users WHERE id = $1',
         values : [userId]});
 
         if (!response || !response.rows || !response.rows[0])
@@ -58,17 +56,15 @@ export class UserController
         return new User(
             user.id,
             user.identifiant,
-            user.pass,
+            user.motpasse,
             user.nom,
             user.prenom,
             user.avatar,
-            user.status,
-            user.birthday
             );
     };
 
-    hash (pass) {
-        return crypto.createHash('sha1').update(pass).digest('hex');
+    hash (password) {
+        return crypto.createHash('sha1').update(password).digest('hex');
     };
 
 
@@ -79,7 +75,7 @@ export class UserController
         const connect = await PostgresDB.connectDB();
 
         const response = await connect.query({
-            text : 'SELECT * FROM utilisateurs WHERE identifiant = $1 AND pass = $2',
+            text : 'SELECT * FROM ' + process.env.PG_SCHEMA + '.users WHERE identifiant = $1 AND motpasse = $2',
             values : [username, password]
         });
 
@@ -93,12 +89,10 @@ export class UserController
         return new User(
             user.id,
             user.identifiant,
-            user.pass,
+            user.motpasse,
             user.nom,
             user.prenom,
-            user.avatar,
-            user.status,
-            user.birthday
+            user.avatar
         );
     };
 }

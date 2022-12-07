@@ -5,12 +5,12 @@ import dotenv from 'dotenv'
 import https from 'https';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import message from './src/app/schema/Comment.js';
 import { UserController } from './src/app/controllers/UserController.js';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
 import session from 'express-session';
 import { sessionOptions } from './src/database/MongoSession.js'
+import { PostController } from "./src/app/controllers/PostController.js";
 
 console.log(`${process.env.APP_NAME}`)
 console.log(`Ready on ${process.env.NODE_ENV} mode`)
@@ -27,6 +27,7 @@ const options = {
     cert: fs.readFileSync('keys/cert.pem')
 };
 const userController = new UserController();
+const postController = new PostController();
 
 dotenv.config()
 app.use(cors());
@@ -63,9 +64,9 @@ app.post('/login', async(req, res) => {
             // Récupération des données de l'utilisateur sur la base PG
             const user = await userController.userConnection(username, password);
 
-            if (user && user.identifiant && user.pass)
+            if (user && user.identifiant && user.password)
             {
-                console.log('Username : ' + user.identifiant + ' & Password : ' + user.pass);
+                console.log('Username : ' + user.identifiant + ' & Password : ' + user.password);
 
                 // Génération du token
                 let token = jwt.sign({ data: user }, 'secret')
@@ -116,11 +117,44 @@ app.get('/user/:id', async(req, res) => {
     }
 });
 
-comment()
-async function comment() {
-    const retour = await message.find();
-    console.log(retour);
-}
+app.get('/posts/', async(req, res) => {
+    try
+    {
+        const posts = await postController.getPosts();
+        res.status(200).json(posts);
+    }
+    catch (e)
+    {
+        res.status(500).send({ errName: e.name, errMessage: e.message });
+    }
+});
+
+app.get('/post/:id', async(req, res) => {
+    try
+    {
+        let postId = req.params.id;
+        const posts = await postController.getPostById(postId);
+        res.status(200).json(posts);
+    }
+    catch (e)
+    {
+        res.status(500).send({ errName: e.name, errMessage: e.message });
+    }
+});
+
+app.get('/post/update:id', async(req, res) => {
+    try
+    {
+        let postId = req.params.id;
+        const posts = await postController.getPostById(postId);
+
+        res.status(200).json(posts);
+    }
+    catch (e)
+    {
+        res.status(500).send({ errName: e.name, errMessage: e.message });
+    }
+});
 
 appAng.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');

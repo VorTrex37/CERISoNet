@@ -1,15 +1,13 @@
 export class User
 {
-    constructor(id, identifiant, pass, nom, prenom, avatar, status, birthday)
+    constructor(id, identifiant, password, nom, prenom, avatar)
     {
         this._id = id;
         this._identifiant = identifiant;
-        this._pass = pass;
+        this._password = password;
         this._nom = nom;
         this._prenom = prenom;
         this._avatar = avatar;
-        this._status = status;
-        this._birthday = birthday;
     }
 
     get id()
@@ -32,14 +30,14 @@ export class User
         this._identifiant = value;
     }
 
-    get pass()
+    get password()
     {
-        return this._pass;
+        return this._password;
     }
 
     set pass(value)
     {
-        this._pass = value;
+        this._password = value;
     }
 
     get nom()
@@ -70,25 +68,5 @@ export class User
     set avatar(value)
     {
         this._avatar = value;
-    }
-
-    get status()
-    {
-        return this._status;
-    }
-
-    set status(value)
-    {
-        this._status = value;
-    }
-
-    get birthday()
-    {
-        return this._birthday;
-    }
-
-    set birthday(value)
-    {
-        this._birthday = value;
     }
 }
