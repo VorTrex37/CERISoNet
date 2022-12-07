@@ -5,8 +5,9 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { CommentsComponent } from './pages/comments/comments.component';
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -26,6 +27,7 @@ const customNotifierOptions: NotifierOptions = {
   declarations: [
     AppComponent,
     HomeComponent,
+    CommentsComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +37,6 @@ const customNotifierOptions: NotifierOptions = {
     AuthModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

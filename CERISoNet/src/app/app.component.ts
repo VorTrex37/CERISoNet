@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from "./services/auth.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from "./services/auth.service";
+import { StorageService } from "./services/storage.service";
 
 @Component({
   selector: 'app-root',
@@ -12,8 +12,8 @@ export class AppComponent implements OnInit
   title = 'CERISoNet';
 
   constructor(
-    private _auth: AuthService,
-    private _router: Router,
+    private auth: AuthService,
+    private storage: StorageService,
   ) {}
 
   ngOnInit(): void
@@ -22,12 +22,12 @@ export class AppComponent implements OnInit
   // Récupération du token afin de vérifier la connexion de l'utilisateur
   userConnected()
   {
-    return this._auth.getToken();
+    return this.storage.getToken();
   }
 
   // Permet de déconnecter l'utilisateur
   logout()
   {
-    this._auth.logout();
+    this.auth.logout();
   }
 }

@@ -11,14 +11,14 @@
                 <div class="card-body">
                   <h3 class="card-title m-2">Connectez-vous à CERISoNet</h3>
                   <div class="card-text">
-                    <form #myform = "ngForm" (ngSubmit) = "onSubmit(myform)">
+                    <form #form="ngForm" (ngSubmit)="login(form)">
                       <div class="mb-3">
                         <label for="username" class="form-label">Identifiant</label>
                         <div class="input-group">
                           <span class="input-group-text">
                               <i class="fa fa-user"></i>
                           </span>
-                          <input type="text" id="username" name="username" class="form-control" placeholder="Identifiant" ngModel>
+                          <input type="text" id="username" name="username" class="form-control" placeholder="Identifiant" ngModel required>
                         </div>
                       </div>
                       <div class="mb-3">
@@ -28,7 +28,7 @@
                           <span class="input-group-text">
                               <i class="fa fa-lock"></i>
                           </span>
-                          <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" ngModel>
+                          <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" ngModel required>
                         </div>
                         <div class="col-auto">
                           <span id="passwordHelpInline" class="form-text">Doit comporter entre 9 et 20 caractères.</span>
@@ -45,7 +45,6 @@
                     </form>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

@@ -1,113 +1,66 @@
 import { Injectable } from '@angular/core';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
+import { User } from "../auth/user";
+import { AuthResponse } from "../auth/auth-response";
+import { Observable } from "rxjs";
+import { environment } from "../../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { tap } from 'rxjs/operators';
+import { StorageService } from "./storage.service";
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
+
 export class AuthService {
+  baseURL = environment.baseURL;
+  isLogged: boolean = false
 
-  constructor(private _router: Router) { }
+  constructor(private httpClient: HttpClient,
+              private router: Router,
+              private storage: StorageService) { }
 
-  // Permet de récupérer les datas de l'utilsateur qui sont dans le localStorage
-  getUserDetails()
-  {
-    const userData = this.getDataInLocalStorage('userData');
+  // Permet de connecter l'utilisateur
+  login(user: User) : Observable<AuthResponse> {
+      // Envoie une requête Http POST avec les données du formulaire (username et password)
+      return this.httpClient.post<AuthResponse>(`${this.baseURL}login`, user).pipe(tap(
+        //Réception et Gestion des réponses valides
+        async (res: AuthResponse) => {
+          if (res.data && res.token) {
+            const username = res.data._identifiant;
 
-    if(userData)
-    {
-      return userData
-    }
-    else
-    {
-      return null;
-    }
-  }
-
-  // Permet d'ajouter un item dans le localStorage
-  setDataInLocalStorage(variableName: any, data: any)
-  {
-    localStorage.setItem(variableName, data);
-  }
-
-  // Permet de récupérer un item du le localStorage
-  getDataInLocalStorage(variableName: any)
-  {
-    return localStorage.getItem(variableName);
-  }
-
-  // Permet de récupérer le token de l'utilsateur qui est dans le localStorage
-  getToken()
-  {
-    const token = this.getDataInLocalStorage('token');
-
-    if(token)
-    {
-      return token
-    }
-    else
-    {
-      return null;
-    }
-  }
-
-  // Permet de récupérer la date de connexion de l'utilsateur qui est dans le localStorage
-  getConnectionCurrentDate()
-  {
-    const userData = this.getDataInLocalStorage('userData');
-
-    if (userData)
-    {
-      return this.getDataInLocalStorage('connectionCurrentDate_' + JSON.parse(userData)._identifiant);
-    }
-    else
-    {
-      return null;
-    }
-  }
-
-  // Permet de récupérer la dernière date de connexion de l'utilsateur qui est dans le localStorage
-  getConnectionLastDate()
-  {
-    const userData = this.getDataInLocalStorage('userData');
-
-    if (userData)
-    {
-      return this.getDataInLocalStorage('connectionLastDate_' + JSON.parse(userData)._identifiant);
-    } else
-    {
-      return null;
-    }
-  }
-
-  // Permet de vérifier si l'utilisateur s'est déjà connecté
-  // Set la dernière date de connexion
-  verifLastConnectionDate(username : any)
-  {
-    const lastConnectionDate = this.getDataInLocalStorage('connectionLastDate_' + username);
-    const currentConnectionDate = this.getDataInLocalStorage('connectionCurrentDate_' + username);
-
-    if (lastConnectionDate && currentConnectionDate)
-    {
-      return currentConnectionDate;
-    }
-    else
-    {
-      return 'Première connexion';
-    }
-
-  }
-
-  // Permet de supprimer un item dans le localStorage
-  removeDataInLocalStorage(variableName: any)
-  {
-    localStorage.removeItem(variableName);
+            // Ajout des données de l'utilisateur dans le localStorage
+            localStorage.setItem('userData', JSON.stringify(res.data));
+            // Ajout du token dans le localStorage
+            localStorage.setItem('token', res.token);
+            // Ajout de la dernière connexion dans le localStorage
+            localStorage.setItem('connectionLastDate_' + username, this.storage.verifLastConnectionDate(username));
+            // Ajout de la connexion actuel dans le localStorage
+            localStorage.setItem('connectionCurrentDate_' + username, JSON.stringify(new Date()));
+          }
+        })
+      )
   }
 
   // Permet de déconnecter l'utilisateur en supprimant les datas de l'utilisateur et le token du localStorage
-  logout ()
-  {
-    this.removeDataInLocalStorage('userData');
-    this.removeDataInLocalStorage('token');
-    this._router.navigate([''])
+  async logout() {
+    await localStorage.removeItem('token');
+    await  localStorage.removeItem('userData');
+    this.router.navigateByUrl('');
+  }
+
+  // Vérifie si un utilisateur est connecté
+  isLoggedIn() {
+    const userData = this.storage.getUserDetails();
+
+    if(userData)
+    {
+      this.router.navigateByUrl('')
+      return true;
+    }
+    else {
+      return  false;
+    }
   }
 }
