@@ -47,7 +47,6 @@ export class AuthService {
   async logout() {
     await localStorage.removeItem('token');
     await  localStorage.removeItem('userData');
-    this.router.navigateByUrl('');
   }
 
   // Vérifie si un utilisateur est connecté

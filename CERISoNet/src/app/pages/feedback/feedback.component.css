@@ -1,0 +1,172 @@
+@media (min-width: 600px) {
+  .feed {
+    flex-direction: column;
+  }
+}
+
+.feed {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 100% !important;
+  }
+}
+.card {
+  display: flex;
+  width: 35rem;
+  height: 10%;
+}
+
+.avatar {
+  margin-top: 10px;
+  margin-left: 15px;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 20px;
+  border: 20px;
+  color: #e5e5e5;
+}
+
+#answer_button {
+  background-color: white;
+  color: black;
+  border: white;
+}
+
+#share {
+  background-color: white;
+  color: black;
+  border: white;
+}
+
+
+#like {
+  background-color: white;
+  color: black;
+  border: white;
+}
+
+#likes {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#hashtags {
+  display: flex;
+  justify-content: flex-start;
+}
+#button_answer, #button_share {
+  float: right;
+  background-color: var(--twitter-color);
+  color: white;
+  border: none;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 25px;
+  margin-top: 15px;
+}
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+#answer, #body {
+  margin-top: -40px!important;
+}
+
+#answers, #shares
+{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+#comments
+{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+#illustration {
+  object-fit: contain;
+  border-radius: 20px;
+  width: 90%;
+}
+
+.card-title {
+  text-align: start;
+}
+
+/* post */
+.post {
+  display: flex;
+  align-items: flex-start;
+}
+
+.post__footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 90%;
+}
+
+.post_badge {
+  font-size: 14px !important;
+  color: var(--twitter-color);
+  margin-right: 5px;
+}
+
+.post__headerSpecial {
+  font-weight: 600;
+  font-size: 12px;
+  color: gray;
+}
+
+.post__headerText h3 {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.post__headerDescription {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.post__body {
+  flex: 1;
+  padding: 10px;
+}
+
+.post__avatar {
+  padding: 20px;
+}
+
+#search{
+  display: flex;
+  justify-content: right;
+}
+
+#navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 35rem;
+  margin: auto;
+}
+
+#date_now, #date_now_comment {
+  float: right;
+}
+
+@media (max-width: 600px) {
+  #navigation {
+    width: 100% !important;
+  }
+}

@@ -1,0 +1,166 @@
+<div id="navigation">
+  <div class="card" id="row_search">
+    <div class="card-body">
+      <div class="col-12" id="search">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <label class="col-form-label">Filtres</label>
+          </div>
+          <div class="col-auto">
+            <select class="form-select" [(ngModel)]="selectFilter" (change)="filterPost()">
+              <option *ngFor="let user of users" [value]="user._id">
+                {{user._identifiant}}
+              </option>
+            </select>
+          </div>
+          <div class="col-auto">
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <label class="col-form-label">Trier par</label>
+          </div>
+          <div class="col-auto">
+            <select class="form-select" [(ngModel)]="selectSort" (change)="sortPost()">
+              <option [value]="1">Date par ordre croissant</option>
+              <option [value]="2">Date par ordre décroissant</option>
+              <option [value]="3">Like par ordre croissant</option>
+              <option [value]="4">Like par ordre décroissant</option>
+            </select>
+          </div>
+          <div class="col-auto">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="feed">
+  <div id="pagination">
+    <pagination-controls [maxSize]="5" [responsive]="true" (pageChange)="p = $event" previousLabel="Précédent"
+                         nextLabel="Suivant"></pagination-controls>
+  </div>
+  <div *ngFor="let post of posts | paginate: { itemsPerPage: 3, currentPage: p }; let key = index;">
+    <div *ngIf="verifPosts(post)" class="card">
+      <!-- post starts -->
+      <div class="post">
+        <img class="card-img avatar" [src]='getImage(post["createdBy"]["_avatar"])'>
+        <div class="card-body">
+          <div class="post__header">
+            <div class="post__headerText">
+              <div class="card-title">
+                {{post["createdBy"]["_prenom"]}} {{post["createdBy"]["_nom"]}}
+                <span class="post__headerSpecial">
+              {{post["createdBy"]["_identifiant"] != null ? "@" + post["createdBy"]["_identifiant"] : null}}
+            </span>
+                <span id="date_now" [ngbPopover]="getDateTime(post['date'], post['hour'])"
+                      triggers="mouseenter:mouseleave">
+              {{getDateNow(post["date"], post["hour"])}}
+          </span>
+              </div>
+            </div>
+            <div class="post__headerDescription">
+              <p class="card-text mt-3">{{post["body"]}}</p>
+              <div id="hashtags">
+                <div class="card-text" *ngFor='let hashtag of post["hashtags"]'>
+                  {{hashtag}}&nbsp;
+                </div>
+              </div>
+            </div>
+          </div>
+          <img class="card-img" id="illustration"
+               src='{{post["images"]["url"]}}'
+          />
+          <div class="post__footer">
+            <button id="answer_button" class="btn btn-primary" type="button" (click)="answerCollapse.toggle()"
+                    [attr.aria-expanded]="!answer[key + (p - 1) * 3]" aria-controls="collapseExample2"><i
+              class="fa-regular fa-comment"></i></button>
+            <button id="share" class="btn btn-primary" type="button" (click)="sharedCollapse.toggle()"
+                    [attr.aria-expanded]="!shared[key + (p - 1) * 3]" aria-controls="collapseExample3"><i
+              class="fa-solid fa-retweet"></i></button>
+            <button id="like" class="btn btn-primary" type="button"
+                    (click)='addLike(post["likes"], key + (p - 1) * 3, post["_id"])'><i
+              [style.color]="this.likes[key + (p - 1) * 3] ? 'red' : 'black'" class=""
+              [ngClass]="this.likes[key + (p - 1) * 3] ? 'bi bi-heart-fill' : 'bi bi-heart'"></i> {{post['likes']}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div #answerCollapse="ngbCollapse" [(ngbCollapse)]="answer[key + (p - 1) * 3]">
+      <div class="card" id="answers">
+        <div class="card-body">
+          <form #form="ngForm" (ngSubmit)='sendAnswer(form, post["_id"], key + (p - 1) * 3)'>
+            <div class="input-group">
+              <textarea id="answer" class="form-control" name="answer" class="form-control"
+                        placeholder="Donnez votre réponse" ngModel required></textarea>
+            </div>
+            <button type="submit" class="submit btn btn-primary" id="button_answer">
+              Répondre
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div #sharedCollapse="ngbCollapse" [(ngbCollapse)]="shared[key + (p - 1) * 3]">
+      <div class="card" id="shares">
+        <div class="card-body">
+          <form #formS="ngForm" (ngSubmit)='sendShared(formS, post["_id"], post["Shared"])'>
+            <div class="input-group">
+              <textarea class="form-control" id="body" name="body" class="form-control"
+                        placeholder="Donnez votre réponse" ngModel required></textarea>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" name="image_title" id="image_title" placeholder="Titre de l'image"
+                     ngModel>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" id="image_link" name="image_link" placeholder="Lien de l'image"
+                     ngModel>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="Ajouter des hashtags"
+                     ngModel>
+            </div>
+            <button type="submit" class="submit btn btn-primary" id="button_share">
+              Poster
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <ngb-accordion #acc="ngbAccordion" activeIds="" id="chevron">
+      <ngb-panel title="Voir les commentaires">
+        <ng-template ngbPanelContent>
+          <div *ngFor="let comment of comments[key + (p - 1) * 3]">
+            <div *ngIf="verifComment(comment)" id="comments">
+              <div class="post">
+                <img class="card-img avatar" [src]='getImage(comment["commentedBy"]["_avatar"])'>
+                <div class="card-body">
+                  <div class="post__header">
+                    <div class="post__headerText">
+                      <div class="card-title">
+                        {{comment["commentedBy"]["_prenom"]}} {{comment["commentedBy"]["_nom"]}}
+                        <span class="post__headerSpecial">
+                            {{comment["commentedBy"]["_identifiant"] != null ? "@" + comment["commentedBy"]["_identifiant"] : null}}
+                        </span>
+                        <span id="date_now_comment" [ngbPopover]="getDateTime(comment['date'], comment['hour'])"
+                              triggers="mouseenter:mouseleave">
+                            {{getDateNow(post["date"], post["hour"])}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="post__headerDescription">
+                      <p class="card-text">{{comment["text"]}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+</div>
+

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "./services/auth.service";
 import { StorageService } from "./services/storage.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -14,10 +15,25 @@ export class AppComponent implements OnInit
   constructor(
     private auth: AuthService,
     private storage: StorageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void
-  {}
+  {
+    this.home();
+  }
+
+  home()
+  {
+    if (this.userConnected())
+    {
+      this.router.navigateByUrl('')
+    }
+    else
+    {
+      this.router.navigateByUrl('login')
+    }
+  }
 
   // Récupération du token afin de vérifier la connexion de l'utilisateur
   userConnected()
@@ -29,5 +45,6 @@ export class AppComponent implements OnInit
   logout()
   {
     this.auth.logout();
+    this.router.navigateByUrl('login');
   }
 }

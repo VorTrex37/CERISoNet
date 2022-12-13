@@ -1,11 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~angular-notifier/styles";
-@import url('https://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css');
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 @import url(https://fonts.googleapis.com/css?family=Nunito);
 
 html,
 body {
+  --twitter-color: #50b7f5;
+  --twitter-background: #e6ecf0;
   height: 100%;
   font-family: 'Nunito' !important;
 }

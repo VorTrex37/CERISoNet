@@ -4,10 +4,10 @@ dotenv.config();
 
 export class MongoDB {
     static async connectDB() {
-        if (MongoDB.MongClient == null) {
+        if (MongoDB.MongoClient == null) {
             try {
                 const mongoURI = process.env.MONGO_URI;
-                MongoDB.MongClient = await mongoose.connect(mongoURI, {
+                MongoDB.MongoClient = await mongoose.connect(mongoURI, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true
                 });
@@ -18,6 +18,6 @@ export class MongoDB {
                 process.exit(-1);
             }
         }
-        return MongoDB.MongClient;
+        return MongoDB.MongoClient;
     }
 }

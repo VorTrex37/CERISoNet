@@ -1,16 +1,14 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const User = new mongoose.Schema({
     _id: Number,
-    identifiant: String,
-    pass: String,
+    dentifiant: String,
+    password: String,
     nom: String,
-    prenom: String,
     avatar: String,
-    status: Boolean,
-    birthday: Date,
-}, {
-    collection: process.env.MONGO_SESSION
 })
 
 export default mongoose.model('User', User);

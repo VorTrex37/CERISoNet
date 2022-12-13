@@ -28,9 +28,7 @@ export class LoginComponent implements OnInit
 
   login({form}: { form: any }){
     try {
-      console.log('Your form data : ', form.value);
       this.auth.login(form.value).subscribe(( res)=>{
-        console.log(res);
 
         this.router.navigateByUrl('');
 
@@ -54,12 +52,7 @@ export class LoginComponent implements OnInit
     return this.auth.isLoggedIn();
   }
 
-  /**
-   * Affiche une notification
-   *
-   * @param {string} type    Notification type
-   * @param {string} message Notification message
-   */
+  // Affiche une notification
   public showNotification( type: string, message: string ): void {
     this.notifier.notify( type, message );
   }
