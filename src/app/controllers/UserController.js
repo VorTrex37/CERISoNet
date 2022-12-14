@@ -38,7 +38,7 @@ export class UserController
     async getUsersLogged()
     {
         const connect = await PostgresDB.connectDB();
-        const response = await connect.query({text : 'SELECT * FROM ' + process.env.PG_SCHEMA + '.users WHERE status = $1',
+        const response = await connect.query({text : 'SELECT * FROM ' + process.env.PG_SCHEMA + '.users WHERE statut_connexion = $1',
             values : [1]});
 
         if (!response || !response.rows)
@@ -127,7 +127,7 @@ export class UserController
         const connect = await PostgresDB.connectDB();
 
         return await connect.query({
-            text: 'UPDATE "' + process.env.PG_SCHEMA + '"."users" SET status=$2 WHERE id=$1',
+            text: 'UPDATE "' + process.env.PG_SCHEMA + '"."users" SET statut_connexion=$2 WHERE id=$1',
             values: [id, status],
         });
         
