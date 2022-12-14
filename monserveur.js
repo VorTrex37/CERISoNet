@@ -11,6 +11,7 @@ import cors from 'cors';
 import session from 'express-session';
 import { sessionOptions } from './src/database/MongoSession.js'
 import { PostController } from "./src/app/controllers/PostController.js";
+import {Server} from "socket.io";
 
 console.log(`${process.env.APP_NAME}`)
 console.log(`Ready on ${process.env.NODE_ENV} mode`)
@@ -97,6 +98,8 @@ app.post('/login', async(req, res) => {
                 req.session.isConnected = true;
                 req.session.username = user.identifiant;
 
+                await userController.updateStatus(user._id, 1);
+
                 console.log('Id : ' + req.session.id + ' expire dans ' + req.session.cookie.maxAge);
 
                 return res.status(200).json({data: user, token: token });
@@ -119,6 +122,18 @@ app.get('/users', async(req, res) => {
     {
         const users = await userController.getAllUsers();
         res.status(200).json(users);
+    }
+    catch (e)
+    {
+        res.status(500).send({ errName: e.name, errMessage: e.message });
+    }
+});
+
+app.get('/logout/user/:id', async(req, res) => {
+    try
+    {
+        await userController.updateStatus(req.params.id, 0);
+        return res.status(200).json();
     }
     catch (e)
     {
@@ -364,10 +379,14 @@ appAng.get('/', function(req, res) {
 })
 
 // Création et lancement du serveur https
-https.createServer(options, app).listen(process.env.PORTEX, () => {
+const backEnd = https.createServer(options, app).listen(process.env.PORTEX, () => {
     console.log(`Example app listening on port ${process.env.PORTEX}`)
+    setInterval(async() => {
+        io.emit('users-logged', await userController.getUsersLogged());
+    }, 3000);
 });
 
+const io = new Server(backEnd, { cors: { origin: '*' } });
 https.createServer(options, appAng).listen(process.env.PORTA, () => {
     console.log(`Example app listening on port ${process.env.PORTA}`)
 });

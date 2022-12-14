@@ -35,6 +35,32 @@ export class UserController
             return users;
     };
 
+    async getUsersLogged()
+    {
+        const connect = await PostgresDB.connectDB();
+        const response = await connect.query({text : 'SELECT * FROM ' + process.env.PG_SCHEMA + '.users WHERE status = $1',
+            values : [1]});
+
+        if (!response || !response.rows)
+        {
+            return 'Query execution error';
+        }
+
+        const users = [];
+
+        response.rows.forEach((user) => {
+            users.push(new User(
+                user.id,
+                user.identifiant,
+                user.motpasse,
+                user.nom,
+                user.prenom,
+                user.avatar,
+            ));
+        });
+
+        return users;
+    };
     async getUser(userId)
     {
         if (!Number(userId) && userId !== '0')
@@ -95,4 +121,15 @@ export class UserController
             user.avatar
         );
     };
+
+    async updateStatus(id, status) {
+
+        const connect = await PostgresDB.connectDB();
+
+        return await connect.query({
+            text: 'UPDATE "' + process.env.PG_SCHEMA + '"."users" SET status=$2 WHERE id=$1',
+            values: [id, status],
+        });
+        
+    }
 }

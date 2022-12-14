@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-  import {Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {NotifierService} from "angular-notifier";
 import {StorageService} from "../../services/storage.service";
 import {DatePipe} from "@angular/common";
@@ -9,6 +9,7 @@ import * as dayjs from "dayjs";
 import * as customParsFormat from "dayjs/plugin/customParseFormat";
 import * as relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/fr.js";
+import {Socket} from "ngx-socket-io";
 
 @Component({
   selector: 'app-feedback',
@@ -42,6 +43,7 @@ export class FeedbackComponent implements OnInit {
               private router: Router,
               private storage: StorageService,
               private datePipe: DatePipe,
+              private socket: Socket,
               private notifier: NotifierService) {
     dayjs.extend(customParsFormat)
     dayjs.extend(relativeTime)
@@ -459,5 +461,9 @@ export class FeedbackComponent implements OnInit {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  getUsersLogged() : any{
+    return this.socket.fromEvent('users-logged');
   }
 }

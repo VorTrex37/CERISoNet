@@ -163,4 +163,25 @@
     </ngb-accordion>
   </div>
 </div>
+<div class="row float-end mt-5">
+  <div class="col-auto">
+    <p style="font-size: 1.1em">Les utilisateurs connectés</p>
+<div class="socket" *ngFor="let user of getUsersLogged() | async">
+  <div class="card" style="width: 20rem">
+    <div class="post">
+      <img class="card-img avatar" [src]='getImage(user._avatar)'>
+      <div class="card-body">
+        <div class="post__header">
+          <div class="post__headerText">
+            <div class="card-title">
+              {{user._prenom}} {{user._nom}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
 

@@ -44,9 +44,13 @@ export class AuthService {
   }
 
   // Permet de déconnecter l'utilisateur en supprimant les datas de l'utilisateur et le token du localStorage
-  async logout() {
+  async logout(){
+
+    const userId = this.storage.getUserDetails()._id;
     await localStorage.removeItem('token');
     await  localStorage.removeItem('userData');
+
+    this.httpClient.get<any>(`${this.baseURL}logout/user/` + userId).subscribe();
   }
 
   // Vérifie si un utilisateur est connecté

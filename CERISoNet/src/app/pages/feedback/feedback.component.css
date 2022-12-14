@@ -170,3 +170,8 @@
     width: 100% !important;
   }
 }
+
+.socket {
+  display: flex;
+  justify-content: right;
+}
