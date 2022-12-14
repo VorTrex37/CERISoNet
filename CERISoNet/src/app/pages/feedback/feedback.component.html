@@ -43,171 +43,175 @@
                          nextLabel="Suivant"></pagination-controls>
   </div>
   <div *ngFor="let post of posts | paginate: { itemsPerPage: 3, currentPage: p }; let key = index;">
-    <div *ngIf="verifPosts(post)" class="card">
-      <!-- post starts -->
-      <div class="post">
-        <img class="card-img avatar" [src]='getImage(post["createdBy"]["_avatar"])'>
-        <div class="card-body">
-          <div class="post__header">
-            <div class="post__headerText">
-              <div class="card-title">
-                {{post["createdBy"]["_prenom"]}} {{post["createdBy"]["_nom"]}}
-                <span class="post__headerSpecial">
+    <div *ngIf="verifPosts(post)">
+      <div class="card">
+        <!-- post starts -->
+        <div class="post">
+          <img class="card-img avatar" [src]='getImage(post["createdBy"]["_avatar"])'>
+          <div class="card-body">
+            <div class="post__header">
+              <div class="post__headerText">
+                <div class="card-title">
+                  {{post["createdBy"]["_prenom"]}} {{post["createdBy"]["_nom"]}}
+                  <span class="post__headerSpecial">
               {{post["createdBy"]["_identifiant"] != null ? "@" + post["createdBy"]["_identifiant"] : null}}
             </span>
-                <span id="date_now" [ngbPopover]="getDateTime(post['date'], post['hour'])"
-                      triggers="mouseenter:mouseleave">
+                  <span id="date_now" [ngbPopover]="getDateTime(post['date'], post['hour'])"
+                        triggers="mouseenter:mouseleave">
               {{getDateNow(post["date"], post["hour"])}}
           </span>
+                </div>
               </div>
-            </div>
-            <div class="post__headerDescription">
-              <p class="card-text mt-3">{{post["body"]}}</p>
-              <div id="hashtags">
-                <div class="card-text" *ngFor='let hashtag of post["hashtags"]'>
-                  {{hashtag}}&nbsp;
+              <div class="post__headerDescription">
+                <p class="card-text mt-3">{{post["body"]}}</p>
+                <div id="hashtags">
+                  <div class="card-text" *ngFor='let hashtag of post["hashtags"]'>
+                    {{hashtag}}&nbsp;
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <img class="card-img" id="illustration"
-               src='{{post["images"]["url"]}}'
-          />
-          <div class="sharedDiv">
-          <div *ngIf="verifShared(post['Shared'])" class="card sharedCard">
-            <div class="post2">
-              <img class="card-img avatar" [src]='getImage(post["Shared"]["createdBy"]["_avatar"])'>
-              <div class="card-body">
-                <div class="post__header">
-                  <div class="post__headerText">
-                    <div class="card-title">
-                      {{post['Shared']["createdBy"]["_prenom"]}} {{post['Shared']["createdBy"]["_nom"]}}
-                      <span class="post__headerSpecial">
+            <img class="card-img" id="illustration"
+                 src='{{post["images"]["url"]}}'
+            />
+            <div class="sharedDiv">
+              <div *ngIf="verifShared(post['Shared'])" class="card sharedCard">
+                <div class="post2">
+                  <img class="card-img avatar" [src]='getImage(post["Shared"]["createdBy"]["_avatar"])'>
+                  <div class="card-body">
+                    <div class="post__header">
+                      <div class="post__headerText">
+                        <div class="card-title">
+                          {{post['Shared']["createdBy"]["_prenom"]}} {{post['Shared']["createdBy"]["_nom"]}}
+                          <span class="post__headerSpecial">
                         @{{post['Shared']["createdBy"]["_identifiant"]}}
             </span>
-                    </div>
-                  </div>
-                  <div class="post__headerDescription">
-                    <p class="card-text mt-3">{{post['Shared']["body"]}}</p>
-                    <div id="hashtags2">
-                      <div class="card-text" *ngFor='let hashtag of post["Shared"]["hashtags"]'>
-                        {{hashtag}}&nbsp;
+                        </div>
+                      </div>
+                      <div class="post__headerDescription">
+                        <p class="card-text mt-3">{{post['Shared']["body"]}}</p>
+                        <div id="hashtags2">
+                          <div class="card-text" *ngFor='let hashtag of post["Shared"]["hashtags"]'>
+                            {{hashtag}}&nbsp;
+                          </div>
+                        </div>
                       </div>
                     </div>
+                    <img class="card-img" id="illustration2"
+                         src='{{post["Shared"]["images"]["url"]}}'
+                    />
                   </div>
                 </div>
-                <img class="card-img" id="illustration2"
-                     src='{{post["Shared"]["images"]["url"]}}'
-                />
               </div>
             </div>
-          </div>
-          </div>
 
-          <div class="post__footer">
-            <button id="answer_button" class="btn btn-primary" type="button" (click)="answerCollapse.toggle()"
-                    [attr.aria-expanded]="!answer[key + (p - 1) * 3]" aria-controls="collapseExample2"><i
-              class="fa-regular fa-comment"></i></button>
-            <button id="share" class="btn btn-primary" type="button" (click)="sharedCollapse.toggle()"
-                    [attr.aria-expanded]="!shared[key + (p - 1) * 3]" aria-controls="collapseExample3"><i
-              class="fa-solid fa-retweet"></i></button>
-            <button id="like" class="btn btn-primary" type="button"
-                    (click)='addLike(post["likes"], key + (p - 1) * 3, post["_id"])'><i
-              [style.color]="this.likes[key + (p - 1) * 3] ? 'red' : 'black'" class=""
-              [ngClass]="this.likes[key + (p - 1) * 3] ? 'bi bi-heart-fill' : 'bi bi-heart'"></i> {{post['likes']}}
-            </button>
+            <div class="post__footer">
+              <button id="answer_button" class="btn btn-primary" type="button" (click)="answerCollapse.toggle()"
+                      [attr.aria-expanded]="!answer[key + (p - 1) * 3]" aria-controls="collapseExample2"><i
+                class="fa-regular fa-comment"></i></button>
+              <button id="share" class="btn btn-primary" type="button" (click)="sharedCollapse.toggle()"
+                      [attr.aria-expanded]="!shared[key + (p - 1) * 3]" aria-controls="collapseExample3"><i
+                class="fa-solid fa-retweet"></i></button>
+              <button id="like" class="btn btn-primary" type="button"
+                      (click)='addLike(post["likes"], key + (p - 1) * 3, post["_id"])'><i
+                [style.color]="this.likes[key + (p - 1) * 3] ? 'red' : 'black'" class=""
+                [ngClass]="this.likes[key + (p - 1) * 3] ? 'bi bi-heart-fill' : 'bi bi-heart'"></i> {{post['likes']}}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div #answerCollapse="ngbCollapse" [(ngbCollapse)]="answer[key + (p - 1) * 3]">
-      <div class="card" id="answers">
-        <div class="card-body">
-          <form #form="ngForm" (ngSubmit)='sendAnswer(form, post["_id"], key + (p - 1) * 3)'>
-            <div class="input-group">
+      <div #answerCollapse="ngbCollapse" [(ngbCollapse)]="answer[key + (p - 1) * 3]">
+        <div class="card" id="answers">
+          <div class="card-body">
+            <form #form="ngForm" (ngSubmit)='sendAnswer(form, post["_id"], key + (p - 1) * 3)'>
+              <div class="input-group">
               <textarea id="answer" class="form-control" name="answer" class="form-control"
                         placeholder="Donnez votre réponse" ngModel required></textarea>
-            </div>
-            <button type="submit" class="submit btn btn-primary" id="button_answer">
-              Répondre
-            </button>
-          </form>
+              </div>
+              <button type="submit" class="submit btn btn-primary" id="button_answer">
+                Répondre
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-    <div #sharedCollapse="ngbCollapse" [(ngbCollapse)]="shared[key + (p - 1) * 3]">
-      <div class="card" id="shares">
-        <div class="card-body">
-          <form #formS="ngForm" (ngSubmit)='sendShared(formS, post["_id"], post["Shared"])'>
-            <div class="input-group">
+      <div #sharedCollapse="ngbCollapse" [(ngbCollapse)]="shared[key + (p - 1) * 3]">
+        <div class="card" id="shares">
+          <div class="card-body">
+            <form #formS="ngForm" (ngSubmit)='sendShared(formS, post["_id"], post["Shared"])'>
+              <div class="input-group">
               <textarea class="form-control" id="body" name="body" class="form-control"
                         placeholder="Donnez votre réponse" ngModel required></textarea>
-            </div>
-            <div class="form-group mt-3">
-              <input type="text" class="form-control" name="image_title" id="image_title" placeholder="Titre de l'image"
-                     ngModel>
-            </div>
-            <div class="form-group mt-3">
-              <input type="text" class="form-control" id="image_link" name="image_link" placeholder="Lien de l'image"
-                     ngModel>
-            </div>
-            <div class="form-group mt-3">
-              <input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="Ajouter des hashtags"
-                     ngModel>
-            </div>
-            <button type="submit" class="submit btn btn-primary" id="button_share">
-              Poster
-            </button>
-          </form>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="image_title" id="image_title" placeholder="Titre de l'image"
+                       ngModel>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" id="image_link" name="image_link" placeholder="Lien de l'image"
+                       ngModel>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" id="hashtag" name="hashtag" placeholder="Ajouter des hashtags"
+                       ngModel>
+              </div>
+              <button type="submit" class="submit btn btn-primary" id="button_share">
+                Poster
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-    <ngb-accordion #acc="ngbAccordion" activeIds="" id="chevron">
-      <ngb-panel title="Voir les commentaires">
-        <ng-template ngbPanelContent>
-          <div *ngFor="let comment of comments[key + (p - 1) * 3]">
-            <div *ngIf="verifComment(comment)" id="comments">
-              <div class="post">
-                <img class="card-img avatar" [src]='getImage(comment["commentedBy"]["_avatar"])'>
-                <div class="card-body">
-                  <div class="post__header">
-                    <div class="post__headerText">
-                      <div class="card-title">
-                        {{comment["commentedBy"]["_prenom"]}} {{comment["commentedBy"]["_nom"]}}
-                        <span class="post__headerSpecial">
+      <ngb-accordion #acc="ngbAccordion" activeIds="" id="chevron">
+        <ngb-panel title="Voir les commentaires">
+          <ng-template ngbPanelContent>
+            <div *ngFor="let comment of comments[key + (p - 1) * 3]">
+              <div *ngIf="verifComment(comment)" id="comments">
+                <div class="post">
+                  <img class="card-img avatar" [src]='getImage(comment["commentedBy"]["_avatar"])'>
+                  <div class="card-body">
+                    <div class="post__header">
+                      <div class="post__headerText">
+                        <div class="card-title">
+                          {{comment["commentedBy"]["_prenom"]}} {{comment["commentedBy"]["_nom"]}}
+                          <span class="post__headerSpecial">
                             {{comment["commentedBy"]["_identifiant"] != null ? "@" + comment["commentedBy"]["_identifiant"] : null}}
                         </span>
-                        <span id="date_now_comment" [ngbPopover]="getDateTime(comment['date'], comment['hour'])"
-                              triggers="mouseenter:mouseleave">
+                          <span id="date_now_comment" [ngbPopover]="getDateTime(comment['date'], comment['hour'])"
+                                triggers="mouseenter:mouseleave">
                             {{getDateNow(post["date"], post["hour"])}}
                         </span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="post__headerDescription">
-                      <p class="card-text">{{comment["text"]}}</p>
+                      <div class="post__headerDescription">
+                        <p class="card-text">{{comment["text"]}}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ng-template>
-      </ngb-panel>
-    </ngb-accordion>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
   </div>
 </div>
 <div class="row float-end mt-5">
   <div class="col-auto">
     <p style="font-size: 1.1em">Les utilisateurs connectés</p>
-<div class="socket" *ngFor="let user of getUsersLogged() | async">
-  <div class="card" style="width: 20rem">
-    <div class="post">
-      <img class="card-img avatar" [src]='getImage(user._avatar)'>
-      <div class="card-body">
-        <div class="post__header">
-          <div class="post__headerText">
-            <div class="card-title">
-              {{user._prenom}} {{user._nom}}
+    <div class="socket" *ngFor="let user of getUsersLogged() | async">
+      <div class="card" style="width: 20rem">
+        <div class="post">
+          <img class="card-img avatar" [src]='getImage(user._avatar)'>
+          <div class="card-body">
+            <div class="post__header">
+              <div class="post__headerText">
+                <div class="card-title">
+                  {{user._prenom}} {{user._nom}}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -215,6 +219,3 @@
     </div>
   </div>
 </div>
-</div>
-</div>
-

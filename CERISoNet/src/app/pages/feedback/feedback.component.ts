@@ -177,12 +177,21 @@ export class FeedbackComponent implements OnInit {
 
     }
 
-    const datePost = new Date(date + ' ' + hour);
+    const fullDate = date + ' '+ hour;
+
+    if(fullDate.length != 16)
+    {
+      return null;
+    }
+
+    const datePost = new Date(fullDate);
 
     const longDate = this.datePipe.transform(datePost, "longDate");
     const shortTime = this.datePipe.transform(datePost, "shortTime");
 
     return longDate + ', ' + shortTime;
+
+
   }
 
   getDateNow(date: any, hour: any)
@@ -270,11 +279,17 @@ export class FeedbackComponent implements OnInit {
       const body = form.value.body;
       const url = form.value.image_link;
       const title = form.value.image_title;
-      const hashtags = form.value.hashtag.split(" ").filter((t: string) => t.charAt(0) === '#');
+      let hashtags = form.value.hashtag;
+
+      if (hashtags)
+      {
+        hashtags.split(" ").filter((t: string) => t.charAt(0) === '#');
+      }
       const image = {
         url: url,
         title: title
       };
+
       const userData = this.storage.getUserDetails();
       const date = new Date();
       const shortDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
@@ -338,8 +353,8 @@ export class FeedbackComponent implements OnInit {
   verifPosts(post: any) {
     if (post["_id"] === undefined
       || post["date"] === undefined
-      || post["images"] === undefined
       || post["hour"] === undefined
+      || !this.validateDate(post["date"], post["hour"])
       || post["body"] === undefined
       || post["likes"] === undefined
     ) {
@@ -417,12 +432,12 @@ export class FeedbackComponent implements OnInit {
 
       if ( this.selectSort == 1)
       {
-          sort = 'date_young';
+        sort = 'date_young';
 
       }
       if (this.selectSort == 0)
       {
-          sort = 'reset_sort';
+        sort = 'reset_sort';
 
       }
       if ( this.selectSort == 2)
@@ -498,6 +513,19 @@ export class FeedbackComponent implements OnInit {
   verifShared(shared: any)
   {
     if (shared)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  validateDate (date : any, hour : any)
+  {
+    const fullDate = (date + ' ' + hour);
+    if (dayjs(fullDate, 'YYYY-MM-DD HH:mm').isValid())
     {
       return true;
     }
