@@ -69,37 +69,12 @@ export class PostController
         return await Post.deleteOne({ _id : postId});
     }
 
-    async findByCreator(createdBy) {
+    async findBSearch(createdBy, seach) {
         return await Post.find(
-            { createdBy : createdBy}
+            createdBy
         ).sort(
-            { "date": -1 }
+            seach
         ).lean();
 
-    }
-
-    async findSortByDateDesc() {
-        return await Post.find().sort(
-            { "date": 1 }
-        ).lean();
-        
-    }
-    async findSortByDateAsc() {
-        return await Post.find().sort(
-            { "date": -1 }
-        ).lean();
-
-    }
-
-    async findSortByLikeAsc() {
-        return await Post.find().sort(
-            { "likes": -1 }
-        ).lean();
-    }
-
-    async findSortByLikeDesc() {
-        return await Post.find().sort(
-            { "likes": 1 }
-        ).lean();
     }
 }

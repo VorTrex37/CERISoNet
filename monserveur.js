@@ -44,7 +44,9 @@ async function initializePosts(post)
 
     if (post["Shared"])
     {
-        post["Shared"] = await postController.getPostById(post["_id"]);
+        post["Shared"] = await postController.getPostById(post["Shared"]);
+
+        post["Shared"]["createdBy"] = await userController.getUser(post["Shared"]["createdBy"]);
     }
 
     for (let comment of post["comments"]) {
@@ -295,78 +297,57 @@ app.post('/post/create', async(req, res) => {
     }
 });
 
-app.post('/post/filter', async(req, res) => {
+app.post('/post/search', async(req, res) => {
     try
     {
-        if (!req.body.createdBy)
+        let createdBy;
+        let sortable;
+
+        if (req.body.createdBy)
         {
-            return res.status(400).json({ message: "Erreur l'information n'a pas été transmise" });
+            createdBy = {
+                createdBy: req.body.createdBy
+            };
         }
 
-        const createdBy = req.body.createdBy;
-
-        const postFilter = await postController.findByCreator(createdBy);
-
-        if (postFilter.length === 0)
+        if (req.body.sort === 'date_old')
         {
-            res.status(401).json({ message: "Aucun post trouvé" });
-            return;
+            sortable = {
+                date: 1
+            };
+        }
+        if (req.body.sort === 'date_young' || req.body.sort === 'reset_sort')
+        {
+            sortable = {
+                date: -1
+            };
+        }
+        if (req.body.sort === 'like_less')
+        {
+            sortable = {
+                likes: 1
+            };
+        }
+        if (req.body.sort === 'like_more')
+        {
+            sortable = {
+                likes: -1
+            };
         }
 
-        for (let post of postFilter)
-        {
-            await initializePosts(post)
-        }
+        const postSearch = await postController.findBSearch(createdBy, sortable);
 
-        res.status(200).json(postFilter);
-    }
-    catch (e)
-    {
-        res.status(500).send({ errName: e.name, errMessage: e.message });
-    }
-});
-
-app.post('/post/sort', async(req, res) => {
-    try
-    {
-        if (!req.body.sort)
-        {
-            return res.status(400).json({ message: "Erreur l'information n'a pas été transmise" });
-        }
-
-        const sort = req.body.sort;
-
-        let postSort;
-
-        if (sort === 'date_ascending')
-        {
-            postSort = await postController.findSortByDateAsc();
-        }
-        if (sort === 'date_descending')
-        {
-            postSort = await postController.findSortByDateDesc();
-        }
-        if (sort === 'like_ascending')
-        {
-            postSort = await postController.findSortByLikeAsc();
-        }
-        if (sort === 'like_descending')
-        {
-            postSort = await postController.findSortByLikeDesc();
-
-        }
-
-        if (postSort.length === 0)
+        if (postSearch.length === 0)
         {
             return res.status(401).json({ message: "Erreur aucun post trouvé" });
         }
 
-        for (let post of postSort)
+        for (let post of postSearch)
         {
             await initializePosts(post)
         }
 
-        res.status(200).json(postSort);
+        res.status(200).json(postSearch);
     }
     catch (e)
     {

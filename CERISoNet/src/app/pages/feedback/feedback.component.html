@@ -7,7 +7,8 @@
             <label class="col-form-label">Filtres</label>
           </div>
           <div class="col-auto">
-            <select class="form-select" [(ngModel)]="selectFilter" (change)="filterPost()">
+            <select class="form-select" [(ngModel)]="selectFilter" (change)="searchPost()">
+              <option [value]=" ">Retirer le filtre</option>
               <option *ngFor="let user of users" [value]="user._id">
                 {{user._identifiant}}
               </option>
@@ -21,11 +22,12 @@
             <label class="col-form-label">Trier par</label>
           </div>
           <div class="col-auto">
-            <select class="form-select" [(ngModel)]="selectSort" (change)="sortPost()">
-              <option [value]="1">Date par ordre croissant</option>
-              <option [value]="2">Date par ordre décroissant</option>
-              <option [value]="3">Like par ordre croissant</option>
-              <option [value]="4">Like par ordre décroissant</option>
+            <select class="form-select" [(ngModel)]="selectSort" (change)="searchPost()">
+              <option [value]="0">Ordre par défaut</option>
+              <option [value]="1">Date plus récente</option>
+              <option [value]="2">Date moins récente</option>
+              <option [value]="3">Plus de Like </option>
+              <option [value]="4">Moins de Like</option>
             </select>
           </div>
           <div class="col-auto">
@@ -71,6 +73,37 @@
           <img class="card-img" id="illustration"
                src='{{post["images"]["url"]}}'
           />
+          <div class="sharedDiv">
+          <div *ngIf="verifShared(post['Shared'])" class="card sharedCard">
+            <div class="post2">
+              <img class="card-img avatar" [src]='getImage(post["Shared"]["createdBy"]["_avatar"])'>
+              <div class="card-body">
+                <div class="post__header">
+                  <div class="post__headerText">
+                    <div class="card-title">
+                      {{post['Shared']["createdBy"]["_prenom"]}} {{post['Shared']["createdBy"]["_nom"]}}
+                      <span class="post__headerSpecial">
+                        @{{post['Shared']["createdBy"]["_identifiant"]}}
+            </span>
+                    </div>
+                  </div>
+                  <div class="post__headerDescription">
+                    <p class="card-text mt-3">{{post['Shared']["body"]}}</p>
+                    <div id="hashtags2">
+                      <div class="card-text" *ngFor='let hashtag of post["Shared"]["hashtags"]'>
+                        {{hashtag}}&nbsp;
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <img class="card-img" id="illustration2"
+                     src='{{post["Shared"]["images"]["url"]}}'
+                />
+              </div>
+            </div>
+          </div>
+          </div>
+
           <div class="post__footer">
             <button id="answer_button" class="btn btn-primary" type="button" (click)="answerCollapse.toggle()"
                     [attr.aria-expanded]="!answer[key + (p - 1) * 3]" aria-controls="collapseExample2"><i

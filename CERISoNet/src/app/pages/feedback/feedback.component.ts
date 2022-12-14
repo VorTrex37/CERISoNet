@@ -402,38 +402,66 @@ export class FeedbackComponent implements OnInit {
     }
   }
 
-  sortPost()
+  searchPost()
   {
     try {
 
       let sort;
+      let createdBy;
+      let search;
+
+      if (this.selectFilter && this.selectFilter !== 'Retirer le filtre')
+      {
+        createdBy = this.selectFilter;
+      }
 
       if ( this.selectSort == 1)
       {
-        sort = {
-          sort: 'date_ascending'
-        };
+          sort = 'date_young';
+
+      }
+      if (this.selectSort == 0)
+      {
+          sort = 'reset_sort';
+
       }
       if ( this.selectSort == 2)
       {
-        sort = {
-          sort: 'date_descending'
-        };
+        sort = 'date_old'
       }
       if ( this.selectSort == 3)
       {
-        sort = {
-          sort: 'like_ascending'
-        };
+
+        sort = 'like_more'
       }
-      if ( this.selectSort == 4)
+      if (this.selectSort == 4)
       {
-        sort = {
-          sort: 'like_descending'
-        };
+        sort = 'like_less'
       }
 
-      this.httpClient.post<any>(`${this.baseURL}post/sort`, sort).subscribe(
+      if(createdBy && sort)
+      {
+        search = {
+          createdBy : createdBy,
+          sort :  sort
+        }
+      }
+
+      if(!createdBy && sort)
+      {
+        search = {
+          sort :  sort
+        }
+      }
+
+      if(createdBy && !sort)
+      {
+        search = {
+          createdBy : createdBy,
+        }
+      }
+
+      this.httpClient.post<any>(`${this.baseURL}post/search`, search).subscribe(
         //Réception et Gestion des réponses valides
         async (res: any) => {
           if (res) {
@@ -454,7 +482,7 @@ export class FeedbackComponent implements OnInit {
         //Réception et Gestion des réponses erreurs
         (error: any) => {
           if (error) {
-            this.showNotification('error', "Le tri a échoué")
+            this.showNotification('error', "Une erreur est survenue")
           }
         }
       );
@@ -465,5 +493,17 @@ export class FeedbackComponent implements OnInit {
 
   getUsersLogged() : any{
     return this.socket.fromEvent('users-logged');
+  }
+
+  verifShared(shared: any)
+  {
+    if (shared)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 }
